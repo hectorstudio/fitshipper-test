@@ -1,6 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import { useTable, usePagination, Column } from "react-table";
 import { Address } from "../services/addresses";
+import FieldsForm from "./FieldsForm";
+import FreeForm from "./FreeForm";
+import Modal from "./Modal";
 
 interface TableProps {
   columns: Column<Address>[];
@@ -8,6 +11,9 @@ interface TableProps {
 }
 
 const Table = ({ columns, data }: TableProps) => {
+  const [selected, setSelected] = useState<Address>();
+  const [isFields, setIsFields] = useState(true);
+
   const {
     getTableProps,
     getTableBodyProps,
@@ -49,7 +55,7 @@ const Table = ({ columns, data }: TableProps) => {
           {page.map((row: any, i: number) => {
             prepareRow(row);
             return (
-              <tr {...row.getRowProps()}>
+              <tr className="cursor-pointer" {...row.getRowProps()} onClick={() => setSelected(row.original)}>
                 {row.cells.map((cell: any) => {
                   return (
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900" {...cell.getCellProps()}>{cell.render("Cell")}</td>
@@ -106,6 +112,20 @@ const Table = ({ columns, data }: TableProps) => {
           ))}
         </select>
       </div>
+      {selected && (
+        <Modal title="To Address">
+          {isFields ? <FieldsForm
+            data={selected}
+            onSubmit={(e: Address) => console.log(e)}
+            onClose={() => setSelected(undefined)}
+            onSwitch={() => setIsFields(!isFields)}
+          /> : <FreeForm
+          data={selected}
+          onSubmit={(e: Address) => console.log(e)}
+          onClose={() => setSelected(undefined)}
+          onSwitch={() => setIsFields(!isFields)}
+        />}
+        </Modal>)}
     </>
   );
 };
