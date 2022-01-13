@@ -37,7 +37,7 @@ const FieldsForm = ({ data, onSwitch, onSubmit, onClose }: FormProps) => {
               type="text"
               name="name"
               id="name"
-              value={formData.name}
+              value={formData.name || ""}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                 setFormData({ ...formData, name: e.target.value })
               }
@@ -58,7 +58,7 @@ const FieldsForm = ({ data, onSwitch, onSubmit, onClose }: FormProps) => {
               type="text"
               name="address1"
               id="address1"
-              value={formData.address1}
+              value={formData.address1 || ""}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                 setFormData({ ...formData, address1: e.target.value })
               }
@@ -79,7 +79,7 @@ const FieldsForm = ({ data, onSwitch, onSubmit, onClose }: FormProps) => {
               type="text"
               name="address2"
               id="address2"
-              value={formData.address2}
+              value={formData.address2 || ""}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                 setFormData({ ...formData, address2: e.target.value })
               }
@@ -100,7 +100,7 @@ const FieldsForm = ({ data, onSwitch, onSubmit, onClose }: FormProps) => {
               type="text"
               name="city"
               id="city"
-              value={formData.city}
+              value={formData.city || ""}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                 setFormData({ ...formData, city: e.target.value })
               }
@@ -122,7 +122,7 @@ const FieldsForm = ({ data, onSwitch, onSubmit, onClose }: FormProps) => {
               name="state"
               autoComplete="state"
               className="py-3 px-4 block focus:ring-indigo-500 focus:border-indigo-500 w-full shadow-sm sm:max-w-xs sm:text-sm border border-gray-300 rounded-md"
-              value={formData.city}
+              value={formData.city || ""}
               onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
                 setFormData({ ...formData, state: e.target.value })
               }
@@ -145,7 +145,7 @@ const FieldsForm = ({ data, onSwitch, onSubmit, onClose }: FormProps) => {
               type="text"
               name="zip"
               id="zip"
-              value={formData.zip}
+              value={formData.zip || ""}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                 setFormData({ ...formData, zip: e.target.value })
               }

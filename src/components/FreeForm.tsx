@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { createInferTypeNode } from "typescript";
 import { Address } from "../services/addresses";
 import { FormProps } from "./FieldsForm";
 
@@ -8,6 +9,27 @@ const FreeForm = ({ data, onSwitch, onSubmit, onClose }: FormProps) => {
   useEffect(() => {
     setFormData(data);
   }, [data]);
+
+  const handleFreeFormText = (e: string) => {
+    const copy = {} as Address;
+    let rows = e.split("\n");
+    copy.name = rows[0];
+    if (rows[1]) {
+      copy.address1 = rows[1];
+    }
+    if (rows[2]) {
+      rows = rows[2].split(",");
+      copy.city = rows[0];
+      if (rows[1]) {
+        rows = rows[1].split(" ");
+        copy.state = rows[0];
+        if (rows[1]) {
+          copy.zip = rows[1];
+        }
+      }
+    }
+    setFormData(copy);
+  };
 
   return (
     <div className="p-4 lg:col-span-2">
@@ -36,7 +58,18 @@ const FreeForm = ({ data, onSwitch, onSubmit, onClose }: FormProps) => {
               id="message"
               name="message"
               rows={4}
-              value={`${formData.name}\n${formData.address1} ${formData.address2}\n${formData.city}, ${formData.state} ${formData.zip}`}
+              value={`${formData.name || ""}\n${formData.address1 || ""} ${
+                formData.address2 || ""
+              }${
+                formData.city || formData.state || formData.zip
+                  ? `\n${formData.city || ""}, ${formData.state || ""} ${
+                      formData.zip || ""
+                    }`
+                  : ""
+              }`}
+              onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
+                handleFreeFormText(e.target.value)
+              }
               className="py-3 px-4 block w-full shadow-sm text-warm-gray-900 focus:ring-teal-500 focus:border-teal-500 border border-warm-gray-300 rounded-md"
               aria-describedby="message-max"
             />

@@ -21,3 +21,37 @@ export const getAddresses = async () => {
     return [];
   }
 };
+
+export const createNewAddress = async (e: Address) => {
+  const url = `${API_ADDRESS}/v1/address`;
+  try {
+    const response = await axios.post<Address>(url, {
+      ...e,
+    });
+    return response.data;
+  } catch (error) {
+    return null;
+  }
+}
+
+export const updateAddress = async (e: Address) => {
+  const url = `${API_ADDRESS}/v1/address/${e.id}`;
+  try {
+    const response = await axios.patch<Address>(url, {
+      ...e,
+    });
+    return response.data;
+  } catch (error) {
+    return null;
+  }
+}
+
+export const deleteAddress = async (e: Address) => {
+  const url = `${API_ADDRESS}/v1/address/${e.id}`;
+  try {
+    const response = await axios.delete<any>(url);
+    return response;
+  } catch (error) {
+    return null;
+  }
+}

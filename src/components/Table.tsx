@@ -8,9 +8,11 @@ import Modal from "./Modal";
 interface TableProps {
   columns: Column<Address>[];
   data: Address[];
+  onEdit: (e: Address) => void;
+  onDelete: (e: Address) => void;
 }
 
-const Table = ({ columns, data }: TableProps) => {
+const Table = ({ columns, data, onEdit, onDelete }: TableProps) => {
   const [selected, setSelected] = useState<Address>();
   const [isFields, setIsFields] = useState(true);
 
@@ -35,6 +37,13 @@ const Table = ({ columns, data }: TableProps) => {
   // Render the UI for your table
   return (
     <>
+      <button
+        type="submit"
+        onClick={() => setSelected({} as Address)}
+        className="mt-2 w-full inline-flex items-center justify-center px-6 py-3 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-teal-500 hover:bg-teal-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500 sm:w-auto"
+      >
+        Create New
+      </button>
       <table className="min-w-full divide-y divide-gray-200"{...getTableProps()}>
         <thead className="bg-gray-50">
           {headerGroups.map((headerGroup) => (
@@ -48,6 +57,8 @@ const Table = ({ columns, data }: TableProps) => {
                   {column.render("Header")}
                 </th>
               ))}
+              <th></th>
+              <th></th>
             </tr>
           ))}
         </thead>
@@ -55,12 +66,18 @@ const Table = ({ columns, data }: TableProps) => {
           {page.map((row: any, i: number) => {
             prepareRow(row);
             return (
-              <tr className="cursor-pointer" {...row.getRowProps()} onClick={() => setSelected(row.original)}>
+              <tr className="cursor-pointer" {...row.getRowProps()}>
                 {row.cells.map((cell: any) => {
                   return (
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900" {...cell.getCellProps()}>{cell.render("Cell")}</td>
                   );
                 })}
+                <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium" onClick={() => setSelected(row.original)}>
+                  <button className="text-indigo-600 hover:text-indigo-900">Edit</button>
+                </td>
+              <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                <button className="text-indigo-600 hover:text-indigo-900" onClick={() => onDelete(row.original)}>Delete</button>
+              </td>
               </tr>
             );
           })}
@@ -116,15 +133,21 @@ const Table = ({ columns, data }: TableProps) => {
         <Modal title="To Address">
           {isFields ? <FieldsForm
             data={selected}
-            onSubmit={(e: Address) => console.log(e)}
+            onSubmit={(e: Address) => {
+              onEdit(e);
+              setSelected(undefined);
+            }}
             onClose={() => setSelected(undefined)}
             onSwitch={() => setIsFields(!isFields)}
           /> : <FreeForm
-          data={selected}
-          onSubmit={(e: Address) => console.log(e)}
-          onClose={() => setSelected(undefined)}
-          onSwitch={() => setIsFields(!isFields)}
-        />}
+            data={selected}
+            onSubmit={(e: Address) => {
+              onEdit(e);
+              setSelected(undefined);
+            }}
+            onClose={() => setSelected(undefined)}
+            onSwitch={() => setIsFields(!isFields)}
+          />}
         </Modal>)}
     </>
   );
